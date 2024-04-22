@@ -11,7 +11,7 @@ const io = require("socket.io")(server, {
   },
 });
 
-const PORT = 5055;
+const PORT = 8088;
 
 let roomPosition = {
   "lecture-1": {
@@ -86,8 +86,24 @@ io.on("connection", (socket) => {
   });
 
   socket.on("move", (data) => {
+    console.log("move")
     usersPosition[data.target] = data.position;
     socket.broadcast.emit("move", {
+      id: data.target,
+      position: data.position,
+    });
+  });
+  
+  socket.on("roomEnter", (data) => {
+    usersPosition[data.target] = data.position;
+    socket.broadcast.emit("roomEnter", {
+      id: data.target,
+      position: data.position,
+    });
+  });
+  socket.on("roomLeave", (data) => {
+    usersPosition[data.target] = data.position;
+    socket.broadcast.emit("roomLeave", {
       id: data.target,
       position: data.position,
     });
