@@ -28,8 +28,6 @@ let users = {};
 
 let usersPosition = {};
 
-let userSignals = {};
-
 let room = {
   all: {
     id: "all",
@@ -45,6 +43,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("init", (data) => {
+    console.log(data);
+
     room.all.totalCnt++;
     socket.join(room.all.id);
     users[socket.id] = {
@@ -53,12 +53,15 @@ io.on("connection", (socket) => {
       name: data.name,
       id: socket.id,
     };
+
+    // console.log(users);
     io.emit("init", {
       name: data.name,
       roomNum: "all",
       roomCnt: Object.keys(users).length,
       userList: Object.keys(users),
       users: usersPosition,
+      usersAll:users
     });
     room.all.cnt++;
   });
@@ -86,7 +89,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("move", (data) => {
-    console.log("move")
     usersPosition[data.target] = data.position;
     socket.broadcast.emit("move", {
       id: data.target,
@@ -117,7 +119,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("answerCall", (data) => {
-    console.log("answer geo : ", data.to);
+    // console.log("answer geo : ", data.to);
     io.to(data.to).emit("acceptcall", { signal: data.signal, id: data.id });
   });
 });

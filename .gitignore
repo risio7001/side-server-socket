@@ -1,5 +1,9 @@
 /node_modules
-/index.js
+/index5.js
 /index-rtc.js
 /index2.js
 /index3.js
+/firebase.json
+.firebaserc
+.firebase
+public
